@@ -1,14 +1,11 @@
 (ns cljpyoung.result)
 
-(declare ok!)
-(declare err!)
-
 (defrecord Ok [ok]
   Object
   (toString [this]
     (str "<Ok [" ok "]>"))
   clojure.lang.IDeref
-  (deref [this] (ok! this))
+  (deref [this] ok)
   clojure.lang.Indexed
   (nth [this index]
     (case index 0 ok 1 nil))
@@ -20,13 +17,12 @@
   (toString [this]
     (str "<Err [" err "]>"))
   clojure.lang.IDeref
-  (deref [this] (err! this))
+  (deref [this] err)
   clojure.lang.Indexed
   (nth [this index]
     (case index 0 nil 1 this))
   (nth [this index not-found]
     (case index 0 nil 1 this not-found)))
-
 
 (defmethod print-method Ok [v ^java.io.Writer w]
   (.write w (str v)))
@@ -45,17 +41,16 @@
 (defn ok! [ok]
   (when-not (ok? ok)
     (throw (ex-info "ok!" {:cause :ok! :ok ok})))
-  (:ok ok))
+  (deref ok))
 
 (defn err! [err]
   (when-not (err? err)
     (throw (ex-info "err!" {:cause :err! :err err})))
- (:err err))
+ (deref err))
 
-(defmacro result [x]
+(defmacro result [expr]
   `(try
-     (let [ret# ~x]
-       (ok ret#))
+     (ok ~expr)
      (catch Exception e#
        (err e#))))
 
