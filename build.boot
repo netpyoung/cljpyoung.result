@@ -1,6 +1,6 @@
 (def project
   {:project     'netpyoung/cljpyoung.result
-   :version     "0.2.0"
+   :version     "0.2.1"
    :description "FIXME: write description"
    :url         "https://github.com/netpyoung/cljpyoung.result"
    :scm         {:url "https://github.com/netpyoung/cljpyoung.result"}

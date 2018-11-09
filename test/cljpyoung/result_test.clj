@@ -19,6 +19,7 @@
 
 
 (deftest let-result-simple
+  (is (r/result? (r/let-result :result 1)))
   (is (r/ok? (r/let-result :result 1)))
   (is (r/err? (r/let-result :result (/ 1 0)))))
 

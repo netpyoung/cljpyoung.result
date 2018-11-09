@@ -1,6 +1,9 @@
 (ns cljpyoung.result)
 
+(defprotocol IResult)
+
 (defrecord Ok [ok]
+  IResult
   Object
   (toString [this]
     (str "<Ok [" ok "]>"))
@@ -13,6 +16,7 @@
     (case index 0 ok 1 nil not-found)))
 
 (defrecord Err [err]
+  IResult
   Object
   (toString [this]
     (str "<Err [" err "]>"))
@@ -53,6 +57,9 @@
      (ok ~expr)
      (catch Exception e#
        (err e#))))
+
+(defn result? [o]
+  (satisfies? IResult o))
 
 (defmacro let-result [l & body]
   (if (= :result l)
